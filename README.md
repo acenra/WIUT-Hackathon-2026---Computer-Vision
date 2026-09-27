@@ -409,3 +409,6 @@ Wuit/
     │
     └── weights/
         └── yolo11n.pt
+_____________________________
+для просмотра видео демонстрация проекта
+        https://drive.google.com/drive/folders/1vQqWlFjOdWNTfFwePIkrzPN3ETYLa_Am?usp=drive_link
