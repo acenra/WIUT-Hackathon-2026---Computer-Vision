@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Traffic Vision
+</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    background:
+        #0d1117;
+
+    color:
+        #e6edf3;
+
+    font-family:
+        Arial,
+        sans-serif;
+}
+
+
+header {
+
+    padding:
+        18px 24px;
+
+    background:
+        #161b22;
+
+    border-bottom:
+        1px solid #30363d;
+}
+
+
+h1 {
+
+    margin:
+        0;
+
+    font-size:
+        23px;
+}
+
+
+.subtitle {
+
+    margin-top:
+        5px;
+
+    color:
+        #8b949e;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.toolbar {
+
+    display:
+        flex;
+
+    gap:
+        10px;
+
+    padding:
+        14px 20px;
+
+    background:
+        #11161d;
+
+    border-bottom:
+        1px solid #30363d;
+}
+
+
+input {
+
+    flex:
+        1;
+
+    min-width:
+        300px;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid #30363d;
+
+    border-radius:
+        7px;
+
+    background:
+        #0d1117;
+
+    color:
+        white;
+
+    font-size:
+        14px;
+}
+
+
+button {
+
+    border:
+        0;
+
+    border-radius:
+        7px;
+
+    padding:
+        10px 20px;
+
+    color:
+        white;
+
+    background:
+        #238636;
+
+    cursor:
+        pointer;
+
+    font-size:
+        14px;
+}
+
+
+button:hover {
+
+    filter:
+        brightness(1.15);
+}
+
+
+.stop {
+
+    background:
+        #da3633;
+}
+
+
+#status {
+
+    margin-left:
+        auto;
+
+    align-self:
+        center;
+
+    color:
+        #8b949e;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(360px, 1fr);
+
+    gap:
+        14px;
+
+    padding:
+        14px;
+}
+
+
+.card {
+
+    background:
+        #161b22;
+
+    border:
+        1px solid #30363d;
+
+    border-radius:
+        10px;
+
+    overflow:
+        hidden;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.video-container {
+
+    background:
+        #000;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    min-height:
+        500px;
+}
+
+
+#video {
+
+    width:
+        100%;
+
+    max-height:
+        78vh;
+
+    object-fit:
+        contain;
+
+    display:
+        block;
+}
+
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.panel {
+
+    padding:
+        15px;
+}
+
+
+.metrics {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        9px;
+}
+
+
+.metric {
+
+    background:
+        #0d1117;
+
+    border:
+        1px solid #21262d;
+
+    border-radius:
+        8px;
+
+    padding:
+        12px;
+}
+
+
+.metric-name {
+
+    color:
+        #8b949e;
+
+    font-size:
+        11px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.metric-value {
+
+    margin-top:
+        5px;
+
+    font-size:
+        22px;
+
+    font-weight:
+        bold;
+}
+
+
+#risk {
+
+    color:
+        #58a6ff;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.section-title {
+
+    margin-top:
+        17px;
+
+    color:
+        #8b949e;
+
+    font-size:
+        12px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.events {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        7px;
+
+    margin-top:
+        9px;
+}
+
+
+.event {
+
+    padding:
+        7px 10px;
+
+    border-radius:
+        20px;
+
+    background:
+        #8b2635;
+
+    color:
+        white;
+
+    font-size:
+        12px;
+}
+
+
+.no-event {
+
+    color:
+        #6e7681;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
+   RISK GRAPH
+   ========================================================= */
+
+.graph {
+
+    width:
+        100%;
+
+    height:
+        180px;
+
+    margin-top:
+        9px;
+
+    background:
+        #0d1117;
+
+    border:
+        1px solid #21262d;
+
+    border-radius:
+        8px;
+}
+
+
+canvas {
+
+    width:
+        100%;
+
+    height:
+        100%;
+}
+
+
+/* =========================================================
+   LOG
+   ========================================================= */
+
+.log {
+
+    margin-top:
+        9px;
+
+    max-height:
+        200px;
+
+    overflow-y:
+        auto;
+
+    background:
+        #0d1117;
+
+    border-radius:
+        8px;
+
+    padding:
+        7px;
+}
+
+
+.log-item {
+
+    padding:
+        7px 5px;
+
+    border-bottom:
+        1px solid #21262d;
+
+    font-family:
+        monospace;
+
+    font-size:
+        12px;
+}
+
+
+.log-time {
+
+    color:
+        #58a6ff;
+}
+
+
+.log-event {
+
+    color:
+        #ff7b72;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width: 950px) {
+
+    main {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .video-container {
+
+        min-height:
+            300px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        Traffic Vision — Live Monitor
+    </h1>
+
+    <div class="subtitle">
+        YOLO11 + tracking + TTC + accident risk
+    </div>
+
+</header>
+
+
+<!-- =======================================================
+     TOOLBAR
+     ======================================================= -->
+
+<div class="toolbar">
+
+    <input
+        id="videoPath"
+        value="{{ default_video }}"
+        placeholder="samples/C3905.MP4"
+    >
+
+    <button onclick="startVideo()">
+        START
+    </button>
+
+    <button
+        class="stop"
+        onclick="stopVideo()"
+    >
+        STOP
+    </button>
+
+    <div id="status">
+        Ожидание
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MAIN
+     ======================================================= -->
+
+<main>
+
+
+<!-- =======================================================
+     VIDEO
+     ======================================================= -->
+
+<div class="card">
+
+    <div class="video-container">
+
+        <img
+            id="video"
+            alt="Live video"
+        >
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     RIGHT PANEL
+     ======================================================= -->
+
+<div class="card">
+
+<div class="panel">
+
+
+<div class="metrics">
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Time
+    </div>
+
+    <div
+        id="time"
+        class="metric-value"
+    >
+        0.00 s
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Risk
+    </div>
+
+    <div
+        id="risk"
+        class="metric-value"
+    >
+        0.000
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        TTC
+    </div>
+
+    <div
+        id="ttc"
+        class="metric-value"
+    >
+        --
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Relative Speed
+    </div>
+
+    <div
+        id="relativeSpeed"
+        class="metric-value"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Distance
+    </div>
+
+    <div
+        id="distance"
+        class="metric-value"
+    >
+        --
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Processing FPS
+    </div>
+
+    <div
+        id="fps"
+        class="metric-value"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Vehicles
+    </div>
+
+    <div
+        id="vehicles"
+        class="metric-value"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="metric">
+
+    <div class="metric-name">
+        Persons
+    </div>
+
+    <div
+        id="persons"
+        class="metric-value"
+    >
+        0
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     EVENTS
+     ===================================================== -->
+
+<div class="section-title">
+    Current Events
+</div>
+
+
+<div
+    id="events"
+    class="events"
+>
+
+    <span class="no-event">
+        Нет активных событий
+    </span>
+
+</div>
+
+
+<!-- =====================================================
+     GRAPH
+     ===================================================== -->
+
+<div class="section-title">
+    Risk History
+</div>
+
+
+<div class="graph">
+
+    <canvas id="riskCanvas"></canvas>
+
+</div>
+
+
+<!-- =====================================================
+     LOG
+     ===================================================== -->
+
+<div class="section-title">
+    Event Log
+</div>
+
+
+<div
+    id="eventLog"
+    class="log"
+></div>
+
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+
+// ==========================================================
+// GLOBALS
+// ==========================================================
+
+const MAX_GRAPH_POINTS = 300;
+
+const times = [];
+
+const risks = [];
+
+
+// ==========================================================
+// CANVAS GRAPH
+// ==========================================================
+
+function drawGraph() {
+
+    const canvas =
+        document.getElementById(
+            "riskCanvas"
+        );
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const dpr =
+        window.devicePixelRatio || 1;
+
+
+    canvas.width =
+        rect.width * dpr;
+
+    canvas.height =
+        rect.height * dpr;
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    ctx.scale(
+        dpr,
+        dpr
+    );
+
+
+    const width =
+        rect.width;
+
+    const height =
+        rect.height;
+
+
+    // ------------------------------------------------------
+    // Background
+    // ------------------------------------------------------
+
+    ctx.fillStyle =
+        "#0d1117";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    // ------------------------------------------------------
+    // Grid
+    // ------------------------------------------------------
+
+    ctx.strokeStyle =
+        "#21262d";
+
+    ctx.lineWidth =
+        1;
+
+
+    for (
+        let i = 0;
+        i <= 4;
+        i++
+    ) {
+
+        const y =
+            height
+            -
+            i * height / 4;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            y
+        );
+
+        ctx.lineTo(
+            width,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    if (
+        risks.length < 2
+    ) {
+
+        return;
+    }
+
+
+    // ------------------------------------------------------
+    // Risk line
+    // ------------------------------------------------------
+
+    ctx.strokeStyle =
+        "#58a6ff";
+
+    ctx.lineWidth =
+        2;
+
+
+    ctx.beginPath();
+
+
+    for (
+        let i = 0;
+        i < risks.length;
+        i++
+    ) {
+
+        const x =
+            i
+            /
+            (risks.length - 1)
+            *
+            width;
+
+
+        const y =
+            height
+            -
+            risks[i]
+            *
+            height;
+
+
+        if (i === 0) {
+
+            ctx.moveTo(
+                x,
+                y
+            );
+
+        } else {
+
+            ctx.lineTo(
+                x,
+                y
+            );
+        }
+    }
+
+
+    ctx.stroke();
+
+
+    // ------------------------------------------------------
+    // 0.5 alarm line
+    // ------------------------------------------------------
+
+    ctx.strokeStyle =
+        "#8b949e";
+
+    ctx.setLineDash([
+        5,
+        5
+    ]);
+
+
+    const alarmY =
+        height * 0.5;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        alarmY
+    );
+
+    ctx.lineTo(
+        width,
+        alarmY
+    );
+
+    ctx.stroke();
+
+
+    ctx.setLineDash([]);
+
+
+    // ------------------------------------------------------
+    // labels
+    // ------------------------------------------------------
+
+    ctx.fillStyle =
+        "#8b949e";
+
+    ctx.font =
+        "11px Arial";
+
+
+    ctx.fillText(
+        "1.0",
+        5,
+        12
+    );
+
+
+    ctx.fillText(
+        "0.5",
+        5,
+        alarmY - 5
+    );
+
+
+    ctx.fillText(
+        "0",
+        5,
+        height - 5
+    );
+}
+
+
+// ==========================================================
+// START
+// ==========================================================
+
+async function startVideo() {
+
+    const path =
+        document
+            .getElementById(
+                "videoPath"
+            )
+            .value;
+
+
+    times.length = 0;
+
+    risks.length = 0;
+
+    drawGraph();
+
+
+    const response =
+        await fetch(
+            "/start",
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify({
+                        video:
+                            path
+                    })
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    if (data.ok) {
+
+        document
+            .getElementById(
+                "video"
+            )
+            .src =
+                "/video_feed?time="
+                + Date.now();
+
+    }
+
+
+    updateState(
+        data.state
+    );
+}
+
+
+// ==========================================================
+// STOP
+// ==========================================================
+
+async function stopVideo() {
+
+    await fetch(
+        "/stop",
+        {
+            method:
+                "POST"
+        }
+    );
+
+}
+
+
+// ==========================================================
+// UPDATE STATE
+// ==========================================================
+
+function updateState(
+    state
+) {
+
+
+    // ------------------------------------------------------
+    // Time
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "time"
+        )
+        .textContent =
+            Number(
+                state.time
+            ).toFixed(2)
+            + " s";
+
+
+    // ------------------------------------------------------
+    // Risk
+    // ------------------------------------------------------
+
+    const risk =
+        Number(
+            state.risk
+        );
+
+
+    const riskElement =
+        document
+            .getElementById(
+                "risk"
+            );
+
+
+    riskElement.textContent =
+        risk.toFixed(3);
+
+
+    if (
+        risk >= 0.7
+    ) {
+
+        riskElement.style.color =
+            "#ff7b72";
+
+    } else if (
+        risk >= 0.4
+    ) {
+
+        riskElement.style.color =
+            "#d29922";
+
+    } else {
+
+        riskElement.style.color =
+            "#3fb950";
+    }
+
+
+    // ------------------------------------------------------
+    // TTC
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "ttc"
+        )
+        .textContent =
+            state.ttc == null
+                ? "--"
+                : Number(
+                    state.ttc
+                ).toFixed(2)
+                + " s";
+
+
+    // ------------------------------------------------------
+    // Relative speed
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "relativeSpeed"
+        )
+        .textContent =
+            Number(
+                state.rel_speed
+            ).toFixed(4);
+
+
+    // ------------------------------------------------------
+    // Distance
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "distance"
+        )
+        .textContent =
+            state.distance == null
+                ? "--"
+                : Number(
+                    state.distance
+                ).toFixed(4);
+
+
+    // ------------------------------------------------------
+    // FPS
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "fps"
+        )
+        .textContent =
+            Number(
+                state.fps
+            ).toFixed(1);
+
+
+    // ------------------------------------------------------
+    // Objects
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "vehicles"
+        )
+        .textContent =
+            state.vehicles;
+
+
+    document
+        .getElementById(
+            "persons"
+        )
+        .textContent =
+            state.persons;
+
+
+    // ------------------------------------------------------
+    // Events
+    // ------------------------------------------------------
+
+    const events =
+        document
+            .getElementById(
+                "events"
+            );
+
+
+    events.innerHTML = "";
+
+
+    if (
+        !state.events
+        ||
+        state.events.length === 0
+    ) {
+
+        events.innerHTML =
+            '<span class="no-event">'
+            +
+            'Нет активных событий'
+            +
+            '</span>';
+
+    } else {
+
+        for (
+            const event
+            of state.events
+        ) {
+
+            const element =
+                document.createElement(
+                    "span"
+                );
+
+
+            element.className =
+                "event";
+
+
+            element.textContent =
+                event;
+
+
+            events.appendChild(
+                element
+            );
+        }
+    }
+
+
+    // ------------------------------------------------------
+    // Event log
+    // ------------------------------------------------------
+
+    const log =
+        document
+            .getElementById(
+                "eventLog"
+            );
+
+
+    log.innerHTML = "";
+
+
+    const logItems =
+        state.event_log || [];
+
+
+    for (
+        let i =
+            logItems.length - 1;
+
+        i >= 0;
+
+        i--
+    ) {
+
+        const item =
+            logItems[i];
+
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "log-item";
+
+
+        row.innerHTML =
+            '<span class="log-time">'
+            +
+            Number(
+                item.time
+            ).toFixed(2)
+            +
+            's</span> &nbsp; '
+            +
+            '<span class="log-event">'
+            +
+            item.label
+            +
+            '</span>';
+
+
+        log.appendChild(
+            row
+        );
+    }
+
+
+    // ------------------------------------------------------
+    // Risk history
+    // ------------------------------------------------------
+
+    times.push(
+        Number(
+            state.time
+        )
+    );
+
+
+    risks.push(
+        risk
+    );
+
+
+    if (
+        risks.length
+        > MAX_GRAPH_POINTS
+    ) {
+
+        times.shift();
+
+        risks.shift();
+    }
+
+
+    drawGraph();
+
+
+    // ------------------------------------------------------
+    // Status
+    // ------------------------------------------------------
+
+    document
+        .getElementById(
+            "status"
+        )
+        .textContent =
+            state.message || "";
+}
+
+
+// ==========================================================
+// POLLING
+// ==========================================================
+
+async function pollState() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/state"
+            );
+
+
+        const state =
+            await response.json();
+
+
+        updateState(
+            state
+        );
+
+
+    } catch (error) {
+
+        document
+            .getElementById(
+                "status"
+            )
+            .textContent =
+                "Нет соединения с сервером";
+    }
+
+
+    setTimeout(
+        pollState,
+        250
+    );
+}
+
+
+// ==========================================================
+// RESIZE
+// ==========================================================
+
+window.addEventListener(
+    "resize",
+    drawGraph
+);
+
+
+// ==========================================================
+// INIT
+// ==========================================================
+
+drawGraph();
+
+pollState();
+
+</script>
+
+
+</body>
+
+</html>
